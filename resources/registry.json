@@ -1,0 +1,13 @@
+{
+  "pkgs": [
+    {
+      "name": "ripgrep",
+      "repo": "https://github.com/BurntSushi/ripgrep",
+      "artifact": {
+        "type": 0,
+        "url": "https://https://github.com/BurntSushi/ripgrep/releases/download/{{ version }}/ripgrep-{{ version }}-x86_64-unknown-linux-musl.tar.gz",
+        "binaryPath": "./rg"
+      }
+    }
+  ]
+}

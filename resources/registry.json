@@ -5,7 +5,16 @@
       "repo": "https://github.com/BurntSushi/ripgrep",
       "artifact": {
         "type": 0,
-        "url": "https://https://github.com/BurntSushi/ripgrep/releases/download/{{ version }}/ripgrep-{{ version }}-x86_64-unknown-linux-musl.tar.gz",
+        "url": "https://github.com/BurntSushi/ripgrep/releases/download/{{ .Version }}/ripgrep-{{ .Version }}-x86_64-unknown-linux-musl.tar.gz",
+        "binaryPath": "./rg"
+      }
+    },
+    {
+      "name": "lazygit",
+      "repo": "https://github.com/jesseduffield/lazygit",
+      "artifact": {
+        "type": 0,
+        "url": "https://github.com/jesseduffield/lazygit/releases/download/v{{ .Version }}/lazygit_{{ .Version }}_Linux_x86_64.tar.gz",
         "binaryPath": "./rg"
       }
     }

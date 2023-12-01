@@ -1,6 +1,8 @@
 package registry
 
-import "log"
+import (
+	"log"
+)
 
 type FPackage struct {
 	Name     string    `json:"name"`

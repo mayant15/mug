@@ -78,17 +78,17 @@ func downloadTarball(fileUrl string, destDir string) error {
 		return err
 	}
 
-  if response.StatusCode == 404 {
-    log.Println("Failed to download file: ")
-    return errors.New("404 not found")
-  }
+	if response.StatusCode == 404 {
+		log.Println("Failed to download file: ")
+		return errors.New("404 not found")
+	}
 
 	defer response.Body.Close()
 
 	size, err := io.Copy(destFile, response.Body)
 	defer destFile.Close()
 
-  log.Printf("Downloaded file %s of size %d", filename, size)
+	log.Printf("Downloaded file %s of size %d", filename, size)
 	return nil
 }
 

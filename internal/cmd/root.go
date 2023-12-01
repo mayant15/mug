@@ -8,13 +8,13 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-  Use:   "mug",
-  Short: "Personal package manager",
+	Use:   "mug",
+	Short: "Personal package manager",
 }
 
 func Execute() {
-  if err := rootCmd.Execute(); err != nil {
-    fmt.Fprintln(os.Stderr, err)
-    os.Exit(1)
-  }
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }

@@ -83,12 +83,12 @@ func (pkg *FPackage) FetchLatestArtifact(destDir string) error {
 }
 
 func (pkg *FPackage) Prepare() error {
-  log.Printf("Preparing %s...", pkg.Name)
+	log.Printf("Preparing %s...", pkg.Name)
 	return pkg.Artifact.Prepare()
 }
 
 func (pkg *FPackage) Install() error {
-  log.Printf("Installing %s...", pkg.Name)
+	log.Printf("Installing %s...", pkg.Name)
 	return pkg.Artifact.Install()
 }
 

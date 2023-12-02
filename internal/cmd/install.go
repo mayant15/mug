@@ -22,24 +22,36 @@ var installCmd = &cobra.Command{
 			return err
 		}
 
-		return handleInstallCmd(args[0])
+		return handleInstallCmd(args)
 	},
 }
 
-func handleInstallCmd(pkgName string) error {
+func handleInstallCmd(packages []string) error {
 	config := config.GetConfig()
+
 	registry, err := registry.LoadRegistryFromFile()
 	if err != nil {
 		return err
 	}
 
-	pkg, err := registry.FindPackage(pkgName)
-	if err != nil {
-		log.Println("Failed to locate package: ")
-		return err
+	for _, pkgName := range packages {
+		pkg, err := registry.FindPackage(pkgName)
+		if err != nil {
+			log.Println("Failed to locate package: ")
+			return err
+		}
+
+		err = doInstall(pkg, config.MugPackageDir)
+		if err != nil {
+			log.Printf("!!! FAILED TO INSTALL %s !!!", pkgName)
+		}
 	}
 
-	err = pkg.FetchLatestArtifact(config.MugPackageDir)
+	return err
+}
+
+func doInstall(pkg *registry.FPackage, packagesDir string) error {
+	err := pkg.FetchLatestArtifact(packagesDir)
 	if err != nil {
 		log.Println("Failed to fetch latest artifact for package: ")
 		return err

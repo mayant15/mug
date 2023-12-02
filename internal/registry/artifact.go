@@ -69,14 +69,14 @@ func (artifact *FArtifact) Prepare() error {
 }
 
 func (artifact *FArtifact) Install() error {
-  switch artifact.ArtifactType {
-  case eArtifactType_Tarball:
-    return installTarball(*artifact)
+	switch artifact.ArtifactType {
+	case eArtifactType_Tarball:
+		return installTarball(*artifact)
 
-  default:
-    log.Println("Failed to install artifact:")
-    return errors.New("unsupported artifact type")
-  }
+	default:
+		log.Println("Failed to install artifact:")
+		return errors.New("unsupported artifact type")
+	}
 }
 
 func downloadTarball(fileUrl string, destDir string) (string, error) {
@@ -131,79 +131,79 @@ func downloadTarball(fileUrl string, destDir string) (string, error) {
 }
 
 func installTarball(artifact FArtifact) error {
-  return extractTarball(artifact.filePath, path.Dir(artifact.filePath))
+	return extractTarball(artifact.filePath, path.Dir(artifact.filePath))
 }
 
 func extractTarball(tarpath string, destDir string) error {
-  tarfile, err := openTarfile(tarpath)
-  if err != nil {
-    log.Println("Failed to open downloaded artifact:")
-    return err
-  }
+	tarfile, err := openTarfile(tarpath)
+	if err != nil {
+		log.Println("Failed to open downloaded artifact:")
+		return err
+	}
 
-  reader := tar.NewReader(tarfile)
+	reader := tar.NewReader(tarfile)
 
-  header, err := reader.Next()
-  for err != io.EOF {
+	header, err := reader.Next()
+	for err != io.EOF {
 
-    if err != nil {
-      log.Println("Failed to read tarfile:")
-      return err
-    }
+		if err != nil {
+			log.Println("Failed to read tarfile:")
+			return err
+		}
 
-    filepath := path.Join(destDir, header.Name)
+		filepath := path.Join(destDir, header.Name)
 
-    switch header.Typeflag {
-    case tar.TypeDir:
-      err = os.MkdirAll(filepath, os.ModePerm)
-      if err != nil {
-        log.Printf("Failed to create directory %s:", header.Name)
-        return err
-      }
+		switch header.Typeflag {
+		case tar.TypeDir:
+			err = os.MkdirAll(filepath, os.ModePerm)
+			if err != nil {
+				log.Printf("Failed to create directory %s:", header.Name)
+				return err
+			}
 
-    case tar.TypeReg:
-      file, err := os.OpenFile(filepath, os.O_CREATE | os.O_RDWR, os.FileMode(header.Mode))
-      if err != nil {
-        log.Printf("Failed to create file %s:", header.Name)
-        return err
-      }
+		case tar.TypeReg:
+			file, err := os.OpenFile(filepath, os.O_CREATE|os.O_RDWR, os.FileMode(header.Mode))
+			if err != nil {
+				log.Printf("Failed to create file %s:", header.Name)
+				return err
+			}
 
-      _, err = io.Copy(file, reader)
-      if err != nil {
-        log.Println("Failed to copy file contents from tarball:")
-        return err
-      }
+			_, err = io.Copy(file, reader)
+			if err != nil {
+				log.Println("Failed to copy file contents from tarball:")
+				return err
+			}
 
-      file.Close()
+			file.Close()
 
-    default:
-      log.Println("Failed to extract tarball:")
-      return errors.New("unknown type flag")
-    }
+		default:
+			log.Println("Failed to extract tarball:")
+			return errors.New("unknown type flag")
+		}
 
-    header, err = reader.Next()
-  }
+		header, err = reader.Next()
+	}
 
-  return nil
+	return nil
 }
 
 func openTarfile(path string) (io.Reader, error) {
-  file, err := os.Open(path)
-  if err != nil {
-    log.Println("Failed to read downloaded artifact:")
-    return nil, err
-  }
+	file, err := os.Open(path)
+	if err != nil {
+		log.Println("Failed to read downloaded artifact:")
+		return nil, err
+	}
 
-  if strings.HasSuffix(path, ".tar.gz") {
-    tarfile, err := gzip.NewReader(file)
-    if err != nil {
-      log.Println("Failed to uncompress .tar.gz:")
-      return nil, err
-    }
-    return tarfile, nil
-  } else if strings.HasSuffix(path, ".tar") {
-    return file, nil
-  }
+	if strings.HasSuffix(path, ".tar.gz") {
+		tarfile, err := gzip.NewReader(file)
+		if err != nil {
+			log.Println("Failed to uncompress .tar.gz:")
+			return nil, err
+		}
+		return tarfile, nil
+	} else if strings.HasSuffix(path, ".tar") {
+		return file, nil
+	}
 
-  return nil, errors.New("unsupported filetype: must be one of .tar, .tar.gz")
+	return nil, errors.New("unsupported filetype: must be one of .tar, .tar.gz")
 }

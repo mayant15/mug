@@ -19,35 +19,35 @@ func EnsureDir(path string) error {
 }
 
 func CheckExists(path string) bool {
-  _, err := os.Stat(path)
-  return err == nil
+	_, err := os.Stat(path)
+	return err == nil
 }
 
 func CreateFile(path string) (*os.File, error) {
-  if CheckExists(path) {
-    log.Printf("Failed to create file %s: ", path)
-    return nil, errors.New("file already exists")
-  }
+	if CheckExists(path) {
+		log.Printf("Failed to create file %s: ", path)
+		return nil, errors.New("file already exists")
+	}
 
-  file, err := os.Create(path)
-  if err != nil {
-    log.Printf("Failed to create file %s: ", path)
-    return nil, err
-  }
+	file, err := os.Create(path)
+	if err != nil {
+		log.Printf("Failed to create file %s: ", path)
+		return nil, err
+	}
 
-  return file, nil
+	return file, nil
 }
 
 func EnsureFile(path string) error {
-  if CheckExists(path) {
-    return nil
-  }
+	if CheckExists(path) {
+		return nil
+	}
 
-  _, err := os.Create(path)
-  if err != nil {
-    log.Printf("Failed to create file %s: ", path)
-    return err
-  }
+	_, err := os.Create(path)
+	if err != nil {
+		log.Printf("Failed to create file %s: ", path)
+		return err
+	}
 
-  return nil
+	return nil
 }

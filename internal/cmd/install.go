@@ -45,5 +45,17 @@ func handleInstallCmd(pkgName string) error {
 		return err
 	}
 
+	err = pkg.Prepare()
+	if err != nil {
+		log.Println("Failed to prepare artifact for installation: ")
+		return err
+	}
+
+	err = pkg.Install()
+	if err != nil {
+		log.Println("Failed to install artifact:")
+		return err
+	}
+
 	return nil
 }

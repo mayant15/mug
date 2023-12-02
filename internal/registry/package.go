@@ -6,6 +6,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"path"
 	"regexp"
 	"strings"
 	"text/template"
@@ -21,7 +22,7 @@ const (
 	GITHUB_RELEASES_URL_TEMPLATE = "https://api.github.com/repos/{{ .UserName }}/{{ .RepoName }}/releases/latest"
 )
 
-func (pkg FPackage) GetLatestVersionString() (string, error) {
+func (pkg *FPackage) GetLatestVersionString() (string, error) {
 	userName, repoName := extractNames(pkg.Repo)
 	latestReleaseUrl, err := buildLatestReleaseUrl(fReleaseUrlBuilderParams{
 		UserName: userName,
@@ -55,7 +56,7 @@ func (pkg FPackage) GetLatestVersionString() (string, error) {
 	return version, nil
 }
 
-func (pkg FPackage) FetchLatestArtifact(destDir string) error {
+func (pkg *FPackage) FetchLatestArtifact(destDir string) error {
 	version, err := pkg.GetLatestVersionString()
 	if err != nil {
 		log.Println("Failed to fetch latest version string: ")
@@ -72,13 +73,21 @@ func (pkg FPackage) FetchLatestArtifact(destDir string) error {
 
 	log.Printf("Downloading %s v%s...", pkg.Name, version)
 
-	err = pkg.Artifact.Fetch(fetchUrl, destDir)
+	err = pkg.Artifact.Fetch(fetchUrl, path.Join(destDir, pkg.Name))
 	if err != nil {
 		log.Println("Failed to fetch artifact: ")
 		return err
 	}
 
 	return nil
+}
+
+func (pkg *FPackage) Prepare() error {
+	return pkg.Artifact.Prepare()
+}
+
+func (pkg *FPackage) Install() error {
+	return pkg.Artifact.Install()
 }
 
 type fReleaseUrlBuilderParams struct {

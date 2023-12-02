@@ -3,7 +3,6 @@ package registry
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"log"
 	"net/http"
 	"path"
@@ -63,7 +62,7 @@ func (pkg *FPackage) FetchLatestArtifact(destDir string) error {
 		return err
 	}
 
-	log.Printf("Downloading %s v%s...", pkg.Name, version)
+	log.Printf("Downloading %s %s...", pkg.Name, version)
 
 	fetchUrl, err := pkg.Artifact.BuildUrl(FUrlBuilderParams{
 		Version: version,
@@ -112,6 +111,10 @@ func extractNames(repo string) (userName, repoName string) {
 	}
 }
 
+/**
+ * If a version string includes a number (eg. v0.1.0 or 3.0.1-rc2), extract the number.
+ * Otherwise return the tag as is (eg. stable)
+ */
 func extractVersion(tag string) (string, error) {
 	regex, err := regexp.Compile(`[0-9]+\.[0-9]+\.[0-9]+`)
 	if err != nil {
@@ -121,7 +124,8 @@ func extractVersion(tag string) (string, error) {
 
 	version := regex.FindString(tag)
 	if version == "" {
-		return "", errors.New("empty match")
+		// no matches
+		return tag, nil
 	}
 
 	return version, nil

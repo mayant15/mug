@@ -14,6 +14,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/mayant15/mug/internal/config"
 	"github.com/mayant15/mug/internal/util"
 )
 
@@ -123,15 +124,61 @@ func downloadTarball(fileUrl string, destDir string) (string, error) {
 
 	defer response.Body.Close()
 
-	size, err := io.Copy(destFile, response.Body)
+	_, err = io.Copy(destFile, response.Body)
 	defer destFile.Close()
 
-	log.Printf("Downloaded file %s of size %d", filename, size)
 	return destPath, nil
 }
 
 func installTarball(artifact FArtifact) error {
-	return extractTarball(artifact.filePath, path.Dir(artifact.filePath))
+	destDir, tarfile := path.Split(artifact.filePath)
+	err := extractTarball(artifact.filePath, destDir)
+	if err != nil {
+		log.Println("Failed to extract tarball:")
+		return err
+	}
+
+	extIdx := strings.Index(tarfile, ".tar")
+	if extIdx == -1 {
+		log.Fatalln("Tar archives must have a .tar extension")
+	}
+
+	tarname := tarfile[:extIdx]
+
+	binary, err := findExtractedBinary(destDir, tarname, artifact.BinaryPath)
+	if err != nil {
+		log.Printf("Failed to find binary %s:", artifact.BinaryPath)
+		return err
+	}
+
+	err = linkBinary(binary)
+	if err != nil {
+		log.Println("Failed to symlink binary:")
+		return err
+	}
+
+	return nil
+}
+
+func linkBinary(file string) error {
+	installDir := config.GetConfig().MugInstallDir
+	name := path.Base(file)
+	newname := path.Join(installDir, name)
+	return os.Symlink(file, newname)
+}
+
+func findExtractedBinary(dir string, tarname string, binaryPath string) (string, error) {
+	attempt := path.Join(dir, binaryPath)
+	if util.CheckExists(attempt) {
+		return path.Clean(attempt), nil
+	}
+
+	attempt = path.Join(dir, tarname, binaryPath)
+	if util.CheckExists(attempt) {
+		return path.Clean(attempt), nil
+	}
+
+	return "", errors.New("could not find binary")
 }
 
 func extractTarball(tarpath string, destDir string) error {

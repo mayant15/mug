@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"os"
+	"path"
 
 	"github.com/mayant15/mug/internal/util"
 )
@@ -11,6 +12,7 @@ import (
 type FConfig struct {
 	MugHome       string
 	MugPackageDir string
+	MugInstallDir string
 	UserHomeDir   string
 }
 
@@ -27,8 +29,9 @@ func InitConfig() (*FConfig, error) {
 		return nil, err
 	}
 
-	mugHome := userHomeDir + "/.mug"
-	mugPackageDir := mugHome + "/packages"
+	mugHome := path.Join(userHomeDir, ".mug")
+	mugPackageDir := path.Join(mugHome, "packages")
+	mugInstallDir := path.Join(userHomeDir, ".local", "bin")
 
 	if err := util.EnsureDir(mugHome); err != nil {
 		return nil, err
@@ -36,10 +39,14 @@ func InitConfig() (*FConfig, error) {
 	if err := util.EnsureDir(mugPackageDir); err != nil {
 		return nil, err
 	}
+	if err := util.EnsureDir(mugInstallDir); err != nil {
+		return nil, err
+	}
 
 	_config = &FConfig{
 		MugHome:       mugHome,
 		MugPackageDir: mugPackageDir,
+		MugInstallDir: mugInstallDir,
 		UserHomeDir:   userHomeDir,
 	}
 

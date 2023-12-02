@@ -16,6 +16,7 @@ import (
 
 	"github.com/mayant15/mug/internal/config"
 	"github.com/mayant15/mug/internal/util"
+	"github.com/ulikunitz/xz"
 )
 
 type EArtifactType int
@@ -254,7 +255,14 @@ func openTarfile(path string) (io.Reader, error) {
 			return nil, err
 		}
 		return tarfile, nil
-	} else if strings.HasSuffix(path, ".tar") {
+	} else if strings.HasSuffix(path, ".tar.xz") {
+    tarfile, err := xz.NewReader(file)
+    if err != nil {
+      log.Println("Failed to uncompress .tar.xz:")
+      return nil, err
+    }
+    return tarfile, nil
+  } else if strings.HasSuffix(path, ".tar") {
 		return file, nil
 	}
 

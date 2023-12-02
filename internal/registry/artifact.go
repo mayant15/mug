@@ -256,13 +256,13 @@ func openTarfile(path string) (io.Reader, error) {
 		}
 		return tarfile, nil
 	} else if strings.HasSuffix(path, ".tar.xz") {
-    tarfile, err := xz.NewReader(file)
-    if err != nil {
-      log.Println("Failed to uncompress .tar.xz:")
-      return nil, err
-    }
-    return tarfile, nil
-  } else if strings.HasSuffix(path, ".tar") {
+		tarfile, err := xz.NewReader(file)
+		if err != nil {
+			log.Println("Failed to uncompress .tar.xz:")
+			return nil, err
+		}
+		return tarfile, nil
+	} else if strings.HasSuffix(path, ".tar") {
 		return file, nil
 	}
 

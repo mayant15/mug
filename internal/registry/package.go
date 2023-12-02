@@ -63,6 +63,8 @@ func (pkg *FPackage) FetchLatestArtifact(destDir string) error {
 		return err
 	}
 
+	log.Printf("Downloading %s v%s...", pkg.Name, version)
+
 	fetchUrl, err := pkg.Artifact.BuildUrl(FUrlBuilderParams{
 		Version: version,
 	})
@@ -70,8 +72,6 @@ func (pkg *FPackage) FetchLatestArtifact(destDir string) error {
 		log.Println("Failed to build download url: ")
 		return err
 	}
-
-	log.Printf("Downloading %s v%s...", pkg.Name, version)
 
 	err = pkg.Artifact.Fetch(fetchUrl, path.Join(destDir, pkg.Name))
 	if err != nil {
@@ -83,10 +83,12 @@ func (pkg *FPackage) FetchLatestArtifact(destDir string) error {
 }
 
 func (pkg *FPackage) Prepare() error {
+  log.Printf("Preparing %s...", pkg.Name)
 	return pkg.Artifact.Prepare()
 }
 
 func (pkg *FPackage) Install() error {
+  log.Printf("Installing %s...", pkg.Name)
 	return pkg.Artifact.Install()
 }
 

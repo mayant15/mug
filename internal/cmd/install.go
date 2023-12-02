@@ -2,9 +2,11 @@ package cmd
 
 import (
 	"log"
+	"path"
 
 	"github.com/mayant15/mug/internal/config"
 	"github.com/mayant15/mug/internal/registry"
+	"github.com/mayant15/mug/internal/util"
 	"github.com/spf13/cobra"
 )
 
@@ -41,6 +43,11 @@ func handleInstallCmd(packages []string) error {
 			return err
 		}
 
+		if checkInstalled(*pkg, config.MugInstallDir) {
+			log.Printf("Package %s is already installed", pkgName)
+			continue
+		}
+
 		err = doInstall(pkg, config.MugPackageDir)
 		if err != nil {
 			log.Printf("!!! FAILED TO INSTALL %s !!!", pkgName)
@@ -48,6 +55,11 @@ func handleInstallCmd(packages []string) error {
 	}
 
 	return err
+}
+
+func checkInstalled(pkg registry.FPackage, installDir string) bool {
+	link := path.Clean(path.Join(installDir, path.Base(pkg.Artifact.BinaryPath)))
+	return util.CheckExists(link)
 }
 
 func doInstall(pkg *registry.FPackage, packagesDir string) error {

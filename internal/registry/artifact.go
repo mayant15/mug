@@ -33,7 +33,7 @@ type FArtifact struct {
 	ArtifactType EArtifactType `json:"type"`
 	Url          string        `json:"url"`
 	BinaryPath   string        `json:"binaryPath"`
-	BinaryAlias  string        `json:"alias"`
+	Alias        string        `json:"alias"`
 	filePath     string
 }
 
@@ -153,7 +153,7 @@ func installTarball(artifact FArtifact) error {
 		return err
 	}
 
-	err = linkBinary(binary, artifact.BinaryAlias)
+	err = linkBinary(binary, artifact.Alias)
 	if err != nil {
 		log.Println("Failed to symlink binary:")
 		return err
@@ -266,5 +266,5 @@ func openTarfile(path string) (io.Reader, error) {
 		return file, nil
 	}
 
-	return nil, errors.New("unsupported filetype: must be one of .tar, .tar.gz")
+	return nil, errors.New("unsupported filetype: must be one of .tar, .tar.gz, .tar.xz")
 }

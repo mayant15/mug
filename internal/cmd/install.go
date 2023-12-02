@@ -59,7 +59,7 @@ func handleInstallCmd(packages []string) error {
 }
 
 func checkInstalled(pkg registry.FPackage, installDir string) bool {
-	linkname := pkg.Artifact.BinaryAlias
+	linkname := pkg.Artifact.Alias
 	if linkname == "" {
 		linkname = path.Base(pkg.Artifact.BinaryPath)
 	}

@@ -46,8 +46,6 @@ func (artifact FArtifact) BuildUrl(params FUrlBuilderParams) (string, error) {
 }
 
 func downloadTarball(fileUrl string, destDir string) error {
-	log.Println("downloading tarball...")
-
 	parsedUrl, err := url.Parse(fileUrl)
 	if err != nil {
 		log.Println("Failed to parse fileUrl: ")

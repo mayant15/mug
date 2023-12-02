@@ -32,6 +32,7 @@ type FArtifact struct {
 	ArtifactType EArtifactType `json:"type"`
 	Url          string        `json:"url"`
 	BinaryPath   string        `json:"binaryPath"`
+	BinaryAlias  string        `json:"alias"`
 	filePath     string
 }
 
@@ -151,7 +152,7 @@ func installTarball(artifact FArtifact) error {
 		return err
 	}
 
-	err = linkBinary(binary)
+	err = linkBinary(binary, artifact.BinaryAlias)
 	if err != nil {
 		log.Println("Failed to symlink binary:")
 		return err
@@ -160,9 +161,14 @@ func installTarball(artifact FArtifact) error {
 	return nil
 }
 
-func linkBinary(file string) error {
+func linkBinary(file string, alias string) error {
 	installDir := config.GetConfig().MugInstallDir
-	name := path.Base(file)
+
+	var name = alias
+	if name == "" {
+		name = path.Base(file)
+	}
+
 	newname := path.Join(installDir, name)
 	return os.Symlink(file, newname)
 }

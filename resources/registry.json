@@ -15,7 +15,8 @@
       "artifact": {
         "type": 0,
         "url": "https://github.com/jesseduffield/lazygit/releases/download/v{{ .Version }}/lazygit_{{ .Version }}_Linux_x86_64.tar.gz",
-        "binaryPath": "./lazygit"
+        "binaryPath": "./lazygit",
+        "alias": "lg"
       }
     },
     {

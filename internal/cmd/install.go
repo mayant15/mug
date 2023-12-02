@@ -51,6 +51,7 @@ func handleInstallCmd(packages []string) error {
 		err = doInstall(pkg, config.MugPackageDir)
 		if err != nil {
 			log.Printf("!!! FAILED TO INSTALL %s !!!", pkgName)
+			log.Println("    ERROR: ", err)
 		}
 	}
 
@@ -58,7 +59,12 @@ func handleInstallCmd(packages []string) error {
 }
 
 func checkInstalled(pkg registry.FPackage, installDir string) bool {
-	link := path.Clean(path.Join(installDir, path.Base(pkg.Artifact.BinaryPath)))
+	linkname := pkg.Artifact.BinaryAlias
+	if linkname == "" {
+		linkname = path.Base(pkg.Artifact.BinaryPath)
+	}
+
+	link := path.Clean(path.Join(installDir, linkname))
 	return util.CheckExists(link)
 }
 

@@ -45,6 +45,15 @@
         "url": "https://github.com/junegunn/fzf/releases/download/{{ .Version }}/fzf-{{ .Version }}-linux_amd64.tar.gz",
         "binaryPath": "./fzf"
       }
+    },
+    {
+      "name": "zig",
+      "repo": "https://github.com/ziglang/zig",
+      "artifact": {
+        "type": 0,
+        "url": "https://ziglang.org/download/{{ .Version }}/zig-linux-x86_64-{{ .Version }}.tar.xz",
+        "binaryPath": "./zig"
+      }
     }
   ]
 }

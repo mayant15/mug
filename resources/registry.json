@@ -27,6 +27,24 @@
         "url": "https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz",
         "binaryPath": "./bin/nvim"
       }
+    },
+    {
+      "name": "fd",
+      "repo": "https://github.com/sharkdp/fd",
+      "artifact": {
+        "type": 0,
+        "url": "https://github.com/sharkdp/fd/releases/download/v{{ .Version }}/fd-v{{ .Version }}-x86_64-unknown-linux-musl.tar.gz",
+        "binaryPath": "./fd"
+      }
+    },
+    {
+      "name": "fzf",
+      "repo": "https://github.com/junegunn/fzf",
+      "artifact": {
+        "type": 0,
+        "url": "https://github.com/junegunn/fzf/releases/download/{{ .Version }}/fzf-{{ .Version }}-linux_amd64.tar.gz",
+        "binaryPath": "./fzf"
+      }
     }
   ]
 }

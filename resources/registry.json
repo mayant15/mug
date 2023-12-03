@@ -54,6 +54,15 @@
         "url": "https://ziglang.org/download/{{ .Version }}/zig-linux-x86_64-{{ .Version }}.tar.xz",
         "binaryPath": "./zig"
       }
+    },
+    {
+      "name": "typst",
+      "repo": "https://github.com/typst/typst",
+      "artifact": {
+        "type": 0,
+        "url": "https://github.com/typst/typst/releases/download/v{{ .Version }}/typst-x86_64-unknown-linux-musl.tar.xz",
+        "binaryPath": "./typst"
+      }
     }
   ]
 }

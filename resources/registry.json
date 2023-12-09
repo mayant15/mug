@@ -63,6 +63,15 @@
         "url": "https://github.com/typst/typst/releases/download/v{{ .Version }}/typst-x86_64-unknown-linux-musl.tar.xz",
         "binaryPath": "./typst"
       }
+    },
+    {
+      "name": "hugo",
+      "repo": "https://github.com/gohugoio/hugo",
+      "artifact": {
+        "type": 0,
+        "url": "https://github.com/gohugoio/hugo/releases/download/v{{ .Version }}/hugo_{{ .Version }}_linux-amd64.tar.gz",
+        "binaryPath": "./hugo"
+      }
     }
   ]
 }

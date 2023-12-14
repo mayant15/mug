@@ -72,6 +72,15 @@
         "url": "https://github.com/gohugoio/hugo/releases/download/v{{ .Version }}/hugo_{{ .Version }}_linux-amd64.tar.gz",
         "binaryPath": "./hugo"
       }
+    },
+    {
+      "name": "syncthing",
+      "repo": "https://github.com/syncthing/syncthing",
+      "artifact": {
+        "type": 0,
+        "url": "https://github.com/syncthing/syncthing/releases/download/v{{ .Version }}/syncthing-linux-amd64-v{{ .Version }}.tar.gz",
+        "binaryPath": "./syncthing"
+      }
     }
   ]
 }

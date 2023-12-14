@@ -81,6 +81,15 @@
         "url": "https://github.com/syncthing/syncthing/releases/download/v{{ .Version }}/syncthing-linux-amd64-v{{ .Version }}.tar.gz",
         "binaryPath": "./syncthing"
       }
+    },
+    {
+      "name": "just",
+      "repo": "https://github.com/casey/just",
+      "artifact": {
+        "type": 0,
+        "url": "https://github.com/casey/just/releases/download/{{ .Version }}/just-{{ .Version }}-x86_64-unknown-linux-musl.tar.gz",
+        "binaryPath": "./just"
+      }
     }
   ]
 }

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"log"
-	"path"
 
 	"github.com/mayant15/mug/internal/config"
 	"github.com/mayant15/mug/internal/registry"
@@ -31,13 +30,13 @@ var installCmd = &cobra.Command{
 func handleInstallCmd(packages []string) error {
 	config := config.GetConfig()
 
-	registry, err := registry.LoadRegistryFromFile()
+	reg, err := registry.LoadRegistryFromFile()
 	if err != nil {
 		return err
 	}
 
 	for _, pkgName := range packages {
-		pkg, err := registry.FindPackage(pkgName)
+		pkg, err := reg.FindPackage(pkgName)
 		if err != nil {
 			log.Println("Failed to locate package: ")
 			return err
@@ -56,16 +55,6 @@ func handleInstallCmd(packages []string) error {
 	}
 
 	return err
-}
-
-func checkInstalled(pkg registry.FPackage, installDir string) bool {
-	linkname := pkg.Artifact.Alias
-	if linkname == "" {
-		linkname = path.Base(pkg.Artifact.BinaryPath)
-	}
-
-	link := path.Clean(path.Join(installDir, linkname))
-	return util.CheckExists(link)
 }
 
 func doInstall(pkg *registry.FPackage, packagesDir string) error {
@@ -88,4 +77,9 @@ func doInstall(pkg *registry.FPackage, packagesDir string) error {
 	}
 
 	return nil
+}
+
+func checkInstalled(pkg registry.FPackage, installDir string) bool {
+	link := pkg.Artifact.BuildSymLinkPath(installDir)
+	return util.CheckExists(link)
 }

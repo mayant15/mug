@@ -54,6 +54,15 @@ func (artifact FArtifact) BuildUrl(params FUrlBuilderParams) (string, error) {
 	return buf.String(), nil
 }
 
+func (artifact FArtifact) BuildSymLinkPath(installDir string) string {
+	linkname := artifact.Alias
+	if linkname == "" {
+		linkname = path.Base(artifact.BinaryPath)
+	}
+
+	return path.Clean(path.Join(installDir, linkname))
+}
+
 func (artifact *FArtifact) Fetch(url string, destDir string) error {
 	switch artifact.ArtifactType {
 	case eArtifactType_Tarball:
